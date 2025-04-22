@@ -7,6 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Processus pour démarrer le projet
+- Cloner le projet
+- Metrre à jour le projet avec la commande $composer update
+- Création de la base de données
+- Modification du contenus et renommer le fichier .en.exemple en .env
+- Changement de DB_PORT = 3308 en DB_PORT = 3306
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
