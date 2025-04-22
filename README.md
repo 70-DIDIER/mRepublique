@@ -13,6 +13,7 @@
 - Création de la base de données
 - Modification du contenus et renommer le fichier .en.exemple en .env
 - Changement de DB_PORT = 3308 en DB_PORT = 3306
+- Ensuite on lance le projet
 
 ## About Laravel
 
