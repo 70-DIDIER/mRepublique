@@ -6,10 +6,19 @@
 ✔ Connexion avec email ou téléphone  
 ✔ Table users complète (photo, téléphone, adresse, rôle, vérification, etc.)
 
+
 ✔ CRUD Plat (image, update, delete, etc.)  
 ✔ CRUD Boisson (copié de Plat, même structure)  
 ✔ Stockage d’image dans storage + accès via public  
 
+## Processus pour démarrer le projet
+- Cloner le projet
+- Metrre à jour le projet avec la commande $composer update
+- Création de la base de données
+- Modification du contenus et renommer le fichier .en.exemple en .env
+- Changement de DB_PORT = 3308 en DB_PORT = 3306
+
+## About Laravel
 ✔ Création de commande :  
    ▪ choix plats et boissons  
    ▪ lien avec client  
