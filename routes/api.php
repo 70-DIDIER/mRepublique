@@ -2,11 +2,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlatController;
+use App\Http\Controllers\BoissonController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 // 📦 Route publique pour voir la liste des plats
 Route::get('/plats', [PlatController::class, 'index']);
+Route::get('/boissons', [BoissonController::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -14,4 +17,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/plats/{id}', [PlatController::class, 'show']);
     Route::put('/plats/{id}', [PlatController::class, 'update']);
     Route::delete('/plats/{id}', [PlatController::class, 'destroy']);
+    // 📦 Routes pour les boissons
+    Route::post('/boissons', [BoissonController::class, 'store']);
+    Route::get('/boissons/{id}', [BoissonController::class, 'show']);   
+    Route::put('/boissons/{id}', [BoissonController::class, 'update']);
+    Route::delete('/boissons/{id}', [BoissonController::class, 'destroy']);
+});
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    
 });
