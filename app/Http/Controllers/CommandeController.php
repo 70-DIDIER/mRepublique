@@ -99,10 +99,57 @@ class CommandeController extends Controller
             // Total final = prix des articles + frais de livraison
             $commande->montant_total = $total + $fraisLivraison;
             $commande->save();
+            $commande->refresh(); // recharge les données en base
+            $distanceKm = round($distance, 2); // distance formatée
+
+            $articlesDetails = [];
+
+            foreach ($request->articles as $article) {
+                $quantite = $article['quantite'];
+
+                if ($article['type'] === 'plat') {
+                    $plat = Plat::find($article['id']);
+                    if ($plat) {
+                        $articlesDetails[] = [
+                            'nom' => $plat->nom,
+                            'type' => 'plat',
+                            'quantite' => $quantite,
+                            'prix_unitaire' => number_format($plat->prix, 0, '', ' ') . ' FCFA',
+                            'total' => number_format($plat->prix * $quantite, 0, '', ' ') . ' FCFA',
+                        ];
+                    }
+                } elseif ($article['type'] === 'boisson') {
+                    $boisson = Boisson::find($article['id']);
+                    if ($boisson) {
+                        $articlesDetails[] = [
+                            'nom' => $boisson->nom,
+                            'type' => 'boisson',
+                            'quantite' => $quantite,
+                            'prix_unitaire' => number_format($boisson->prix, 0, '', ' ') . ' FCFA',
+                            'total' => number_format($boisson->prix * $quantite, 0, '', ' ') . ' FCFA',
+                        ];
+                    }
+                }
+            }
 
             DB::commit();
 
-            return response()->json(['message' => 'Commande passée avec succès', 'commande' => $commande], 201);
+            return response()->json([
+                'message' => 'Commande passée avec succès',
+                'commande' => [
+                    'id' => $commande->id,
+                    'statut' => $commande->statut,
+                    'date' => $commande->created_at->format('d/m/Y à H:i'),
+                    'distance_estimee' => $distanceKm . ' km',
+                    'montant_des_articles' => number_format($total, 0, '', ' ') . ' FCFA',
+                    'frais_livraison' => number_format($fraisLivraison, 0, '', ' ') . ' FCFA',
+                    'montant_total' => number_format($commande->montant_total, 0, '', ' ') . ' FCFA',
+                    'adresse_livraison' => $commande->adresse_livraison,
+                    'commentaire' => $commande->commentaire,
+                    'articles' => $articlesDetails
+                ]
+            ], 201);
+            
 
         } catch (\Exception $e) {
             DB::rollBack();

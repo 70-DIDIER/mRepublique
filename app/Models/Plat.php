@@ -8,6 +8,7 @@ class Plat extends Model
 {
     protected $fillable = [
         'nom',
+        'categorie',
         'description',
         'prix',
         'image',
