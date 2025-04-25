@@ -41,23 +41,28 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $fields = $request->validate([
-            'email' => 'required|string|email',
+            'identifiant' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $fields['email'])->first();
+         // On recherche par email ou téléphone
+            $user = User::where('email', $request->identifiant)
+            ->orWhere('telephone', $request->identifiant)
+            ->first();
 
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response()->json([
-                'message' => 'Identifiants invalides'
-            ], 401);
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Identifiants incorrects.'], 401);
         }
 
-        $token = $user->createToken('token')->plainTextToken;
+        // if (! $user->is_verified) {
+        // return response()->json(['message' => 'Votre compte n\'est pas encore vérifié.'], 403);
+        // }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
-            'token' => $token,
+        'user' => $user,
+        'token' => $token,
         ]);
     }
 
