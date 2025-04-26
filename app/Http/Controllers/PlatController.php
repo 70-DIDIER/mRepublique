@@ -24,6 +24,7 @@ class PlatController extends Controller
     {
         $request->validate([
             'nom' => 'required|string',
+            'categorie' => 'required|string|nullable',
             'description' => 'nullable|string',
             'prix' => 'required|numeric',
             'image' => 'nullable|image|max:2048',
@@ -37,6 +38,7 @@ class PlatController extends Controller
 
         $plat = Plat::create([
             'nom' => $request->nom,
+            'categorie' => $request->categorie,
             'description' => $request->description,
             'prix' => $request->prix,
             'image' => $imagePath,
@@ -53,6 +55,7 @@ class PlatController extends Controller
 
         $request->validate([
             'nom' => 'sometimes|string',
+            'categorie' => 'sometimes|string|nullable',
             'description' => 'sometimes|nullable|string',
             'prix' => 'sometimes|numeric',
             'image' => 'nullable|image|max:2048',
@@ -64,7 +67,6 @@ class PlatController extends Controller
         if ($request->has('nom')) {
             $data['nom'] = $request->input('nom');
         }
-
         if ($request->has('description')) {
             $data['description'] = $request->input('description');
         }

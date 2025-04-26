@@ -8,6 +8,7 @@ class Plat extends Model
 {
     protected $fillable = [
         'nom',
+        'categorie',
         'description',
         'prix',
         'image',
@@ -21,4 +22,9 @@ class Plat extends Model
     {
         return $this->image ? asset('storage/' . $this->image) : null;
     }
+        public function commandes()
+    {
+        return $this->belongsToMany(Commande::class, 'commande_plat')->withPivot('quantite');
+    }
+
 }

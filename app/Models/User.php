@@ -56,4 +56,5 @@ class User extends Authenticatable
     public function livraisons() {
         return $this->hasMany(Livraison::class, 'livreur_id');
     }
+    
 }

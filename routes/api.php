@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\BoissonController;
+use App\Http\Controllers\CommandeController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -25,4 +26,10 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     
+});
+// la route pour faire les commandes
+Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
+    Route::post('/commandes', [CommandeController::class, 'store']);
+    Route::get('/commandes', [CommandeController::class, 'index']);
+    Route::get('/commandes/{id}', [CommandeController::class, 'show']);
 });

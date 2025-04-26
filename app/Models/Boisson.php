@@ -20,5 +20,10 @@ class Boisson extends Model
     {
         return $this->image ? asset('storage/' . $this->image) : null;
     }
-    
+    public function commandes()
+    {
+        return $this->belongsToMany(Commande::class, 'commande_plat')
+                    ->withPivot('quantite', 'plat_id');
+    }
+
 }

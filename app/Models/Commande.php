@@ -14,17 +14,30 @@ class Commande extends Model
         'statut',
         'total',
         'type_livraison',
+        'latitude',
+        'longitude',
+        'adresse_livraison',
+        'frais_livraison',
+        'commentaire',
     ];
 
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function plats() {
-        return $this->belongsToMany(Plat::class)->withPivot('quantite');
-    }
+    
 
     public function livraison() {
         return $this->hasOne(Livraison::class);
     }
+    public function client()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
+public function plats()
+{
+    return $this->belongsToMany(Plat::class, 'commande_plat')->withPivot('quantite', 'boisson_id');
+}
+
 }
