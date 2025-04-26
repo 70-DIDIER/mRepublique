@@ -11,6 +11,7 @@ class Plat extends Model
         'description',
         'prix',
         'image',
+        'catégorie',
     ];
 
     // Pour exposer l’URL de l’image
