@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Services\AfrikSmsService;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -11,32 +12,82 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
+            'email' => 'sometimes|nullable|string|email|unique:users',
             'password' => 'required|string|confirmed',
             'role' => 'required|in:client,livreur,admin',
             'adresse' => 'sometimes|nullable|string',
-            'telephone' => 'sometimes|nullable|string',
-            'photo' => 'sometimes|nullable|string', // si tu envoies juste un chemin pour le moment
+            'telephone' => 'sometimes|nullable|string|unique:users,telephone',
+            'photo' => 'sometimes|nullable|string', 
         ]);
         
 
         $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
+            'name' => $fields['name'],   
+            'email' => $fields['email'] ?? null,
             'password' => bcrypt($fields['password']),
             'role' => $fields['role'],
             'adresse' => $fields['adresse'] ?? null,
             'telephone' => $fields['telephone'] ?? null,
             'photo' => $fields['photo'] ?? null,
         ]);
+         // Générer un code de confirmation
+        $code = random_int(1000, 9999);
 
-        $token = $user->createToken('token')->plainTextToken;
+        // Stocker le code et sa date d'expiration
+        $user->code_sms = $code;
+        $user->code_expires_at = now()->addMinutes(10);
+        $user->save();
+        
+        $numero = $user->telephone;
+        // Ajouter automatiquement 228 si ce n'est pas déjà présent
+        if (!str_starts_with($numero, '228')) {
+            $numero = '228' . ltrim($numero, '0'); // Supprime 0 devant
+        }
+        // Préparer le message
+        $message = "Bienvenue chez le restaurant M'Republique!!! veillez activer votre compte avec le code d'activation suivant : $code";
+
+        // Envoyer le SMS
+        app(AfrikSmsService::class)->sendSms($numero, $message);
+
 
         return response()->json([
-            'user' => $user,
-            'token' => $token,
+            'message' => 'Utilisateur enregistré. Un code de confirmation a été envoyé par SMS.',
+            'user' => $user
         ], 201);
     }
+
+    public function verifyCode(Request $request)
+{
+    $request->validate([
+        'telephone' => 'required|string',
+        'code' => 'required|string',
+    ]);
+
+    // Chercher l'utilisateur par numéro de téléphone
+    $user = User::where('telephone', $request->telephone)->first();
+
+    if (!$user) {
+        return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+    }
+
+    // Vérifier que le code est correct
+    if ($user->code_sms !== $request->code) {
+        return response()->json(['message' => 'Code incorrect.'], 400);
+    }
+
+    // Vérifier que le code n'a pas expiré
+    if (now()->greaterThan($user->code_expires_at)) {
+        return response()->json(['message' => 'Code expiré.'], 400);
+    }
+
+    // Valider l'utilisateur (par exemple changer un statut ou un champ is_verified)
+    $user->is_verified = true; // ajoute ce champ dans ta table users si besoin
+    $user->code_sms = null; // Nettoyer le code
+    $user->code_expires_at = null; // Nettoyer l'expiration
+    $user->save();
+
+    return response()->json(['message' => 'Compte vérifié avec succès.'], 200);
+}
 
     public function login(Request $request)
     {

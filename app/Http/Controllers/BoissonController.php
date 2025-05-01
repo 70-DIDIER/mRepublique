@@ -77,7 +77,7 @@ class BoissonController extends Controller
             // Enregistrer la nouvelle image
             $data['image'] = $request->file('image')->store('images', 'public');
         }
-        // Mettre à jour le plat
+        // Mettre à jour la boisson
         $boisson->update($data);
         return response()->json($boisson, 200);
     }

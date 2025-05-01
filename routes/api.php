@@ -4,7 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\BoissonController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\PaiementController;
 
+Route::post('/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 // 📦 Route publique pour voir la liste des plats
@@ -33,3 +35,11 @@ Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
     Route::get('/commandes', [CommandeController::class, 'index']);
     Route::get('/commandes/{id}', [CommandeController::class, 'show']);
 });
+
+// les routes pour demander un paiement
+Route::post('/paiements', [PaiementController::class, 'store']);
+Route::put('/paiements/{id}', [PaiementController::class, 'updateStatus']);
+Route::get('/paiements/check/{id}', [PaiementController::class, 'check']);
+Route::get('/paiements/commande/{commandeId}', [PaiementController::class, 'show']);
+// Webhook (callback automatique de PayGate)
+Route::post('/paygate/callback', [PaiementController::class, 'callback']);
