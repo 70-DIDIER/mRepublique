@@ -108,7 +108,7 @@ endpoints:
         name: role
         description: ''
         required: true
-        example: client
+        example: livreur
         type: string
         enumValues:
           - client
@@ -151,7 +151,7 @@ endpoints:
       name: consequatur
       email: carolyne.luettgen@example.org
       password: 'O[2UZ5ij-e/dl4m{o,'
-      role: client
+      role: livreur
       adresse: consequatur
       telephone: consequatur
       photo: consequatur
@@ -209,123 +209,6 @@ endpoints:
       password: 'O[2UZ5ij-e/dl4m{o,'
     fileParameters: []
     responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/plats
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: '[{"id":2,"nom":"FUFU","categorie":null,"description":"fufu de kplaim\u00e9","prix":"4000.00","image":"images\/K7GQ8vBzD8i9CmToNioPuYB9u4yfW5KBuU7D8sF8.jpg","created_at":"2025-04-21T15:23:05.000000Z","updated_at":"2025-04-22T17:40:21.000000Z","image_url":"http:\/\/localhost\/storage\/images\/K7GQ8vBzD8i9CmToNioPuYB9u4yfW5KBuU7D8sF8.jpg"},{"id":3,"nom":"ablo","categorie":null,"description":"ablo zozo","prix":"5000.00","image":"images\/cxw4E1RBq7cup6zyQbj2EyIasbJIAznvux9C9Pz3.jpg","created_at":"2025-04-21T15:37:02.000000Z","updated_at":"2025-04-22T17:38:10.000000Z","image_url":"http:\/\/localhost\/storage\/images\/cxw4E1RBq7cup6zyQbj2EyIasbJIAznvux9C9Pz3.jpg"},{"id":4,"nom":"AKPLE ku tade","categorie":null,"description":"AKPLE","prix":"5000.00","image":"images\/nZz3kCJHE1o4norZRtmFplowHOIZUOLHLG8NlhrM.jpg","created_at":"2025-04-21T15:40:30.000000Z","updated_at":"2025-04-21T15:40:30.000000Z","image_url":"http:\/\/localhost\/storage\/images\/nZz3kCJHE1o4norZRtmFplowHOIZUOLHLG8NlhrM.jpg"},{"id":6,"nom":"deku dessi","categorie":"d\u00e9jeuner","description":"la sauce de deku","prix":"3000.00","image":"images\/VGBjfyLV9pcpoukNwyWduIQzVtne927IzXXgUZhz.jpg","created_at":"2025-04-25T16:25:20.000000Z","updated_at":"2025-04-25T16:25:20.000000Z","image_url":"http:\/\/localhost\/storage\/images\/VGBjfyLV9pcpoukNwyWduIQzVtne927IzXXgUZhz.jpg"}]'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/boissons
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: '[{"id":1,"nom":"jack daniel","categorie":"whisky 10 cl","description":"une tr\u00e8s bonne boisson","prix":"3000.00","image":"images\/HZITNHq1dTznhytXLkNzgrbgpzNS29j9sDoZtT0B.jpg","created_at":"2025-04-23T15:51:45.000000Z","updated_at":"2025-04-23T15:51:45.000000Z","image_url":"http:\/\/localhost\/storage\/images\/HZITNHq1dTznhytXLkNzgrbgpzNS29j9sDoZtT0B.jpg"},{"id":5,"nom":"sodabi djota","categorie":"boisson local","description":"ahep\u00e9 akua akua","prix":"2000.00","image":"images\/LzS3bOfscJ4aVty0c6aLrLvIfO9gkDnFtL9gEKwZ.jpg","created_at":"2025-04-23T16:09:39.000000Z","updated_at":"2025-04-23T16:11:07.000000Z","image_url":"http:\/\/localhost\/storage\/images\/LzS3bOfscJ4aVty0c6aLrLvIfO9gkDnFtL9gEKwZ.jpg"}]'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/me
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
     responseFields: []
     auth: []
     controller: null
@@ -396,12 +279,12 @@ endpoints:
       categorie:
         name: categorie
         description: ''
-        required: true
+        required: false
         example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
       description:
         name: description
@@ -449,56 +332,6 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: 'api/plats/{id}'
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the plat.'
-        required: true
-        example: 2
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 2
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
       - PUT
     uri: 'api/plats/{id}'
     metadata:
@@ -518,14 +351,14 @@ endpoints:
         name: id
         description: 'The ID of the plat.'
         required: true
-        example: 2
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -614,14 +447,14 @@ endpoints:
         name: id
         description: 'The ID of the plat.'
         required: true
-        example: 2
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -666,56 +499,6 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: 'api/boissons/{id}'
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the boisson.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
       - PUT
     uri: 'api/boissons/{id}'
     metadata:
@@ -735,14 +518,14 @@ endpoints:
         name: id
         description: 'The ID of the boisson.'
         required: true
-        example: 1
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -831,14 +614,14 @@ endpoints:
         name: id
         description: 'The ID of the boisson.'
         required: true
-        example: 1
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -975,95 +758,6 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: api/commandes
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/commandes/{id}'
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the commande.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
       - POST
     uri: api/paiements
     metadata:
@@ -1097,7 +791,7 @@ endpoints:
         name: methode
         description: ''
         required: true
-        example: tmoney
+        example: flooz
         type: string
         enumValues:
           - flooz
@@ -1117,63 +811,10 @@ endpoints:
         custom: []
     cleanBodyParameters:
       commande_id: consequatur
-      methode: tmoney
+      methode: flooz
       telephone: consequatur
     fileParameters: []
     responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/paiements/check/{id}'
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the check.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "No query results for model [App\\Models\\Paiement] consequatur"
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
     responseFields: []
     auth: []
     controller: null
@@ -1202,6 +843,99 @@ endpoints:
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/livraisons/prendre/{commandeId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      commandeId:
+        name: commandeId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      commandeId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/livraisons/livrer/{id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the livrer.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code_validation:
+        name: code_validation
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      code_validation: consequatur
     fileParameters: []
     responses: []
     responseFields: []
