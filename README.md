@@ -19,6 +19,14 @@
 - Changement de DB_PORT = 3308 en DB_PORT = 3306
 - Ensuite on lance le projet
 
+## Processus pour démarrer le projet
+- Cloner le projet
+- Metrre à jour le projet avec la commande $composer update
+- Création de la base de données
+- Modification du contenus et renommer le fichier .en.exemple en .env
+- Changement de DB_PORT = 3308 en DB_PORT = 3306
+- Ensuite on lance le projet
+
 ## About Laravel
 ✔ Création de commande :  
    ▪ choix plats et boissons  
