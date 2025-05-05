@@ -14,7 +14,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/plats', [PlatController::class, 'index']);
 Route::get('/boissons', [BoissonController::class, 'index']);
 
-Route::middleware(['auth:sanctum', 'role:client|admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:client,admin'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/plats', [PlatController::class, 'store']);
@@ -48,7 +48,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 });
 // // la route pour faire les commandes
-Route::middleware(['auth:sanctum', 'role:livreur'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:livreur,admin'])->group(function () {
      // 📦 Routes pour les livraisons
      Route::post('/livraisons/prendre/{commandeId}', [LivraisonController::class, 'prendre']);
      Route::post('/livraisons/livrer/{id}', [LivraisonController::class, 'livrer']);

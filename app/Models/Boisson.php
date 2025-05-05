@@ -23,7 +23,7 @@ class Boisson extends Model
     public function commandes()
     {
         return $this->belongsToMany(Commande::class, 'commande_plat')
-                    ->withPivot('quantite', 'plat_id');
+                    ->withPivot('quantite', 'boisson_id');
     }
 
 }

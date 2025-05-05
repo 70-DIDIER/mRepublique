@@ -21,23 +21,23 @@ class Commande extends Model
         'commentaire',
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function plats()
+    {
+        // Relation pour les plats commandés (où la colonne boisson_id est null)
+        return $this->belongsToMany(Plat::class, 'commande_plat', 'commande_id', 'plat_id')
+                    ->withPivot('quantite')
+                    ->whereNull('commande_plat.boisson_id');
     }
 
-    
-
-    public function livraison() {
-        return $this->hasOne(Livraison::class);
+    public function boissons()
+    {
+        // Relation pour les boissons commandées (où la colonne boisson_id n'est pas null)
+        return $this->belongsToMany(Boisson::class, 'commande_plat', 'commande_id', 'boisson_id')
+                    ->withPivot('quantite')
+                    ->whereNotNull('commande_plat.boisson_id');
     }
-    public function client()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
-
-public function plats()
-{
-    return $this->belongsToMany(Plat::class, 'commande_plat')->withPivot('quantite', 'boisson_id');
-}
-
+    public function user()
+    {
+    return $this->belongsTo(\App\Models\User::class);
+    }
 }

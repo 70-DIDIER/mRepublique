@@ -55,7 +55,7 @@ class CommandeController extends Controller
     );
 
     // Frais de livraison à 125 FCFA/km
-    $fraisLivraison = ceil($distance * 125);
+    $fraisLivraison = ceil(($distance * 125)*2);
         DB::beginTransaction();
 
         try {

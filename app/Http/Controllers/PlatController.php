@@ -28,7 +28,6 @@ class PlatController extends Controller
             'description' => 'nullable|string',
             'prix' => 'required|numeric',
             'image' => 'nullable|image|max:2048',
-            'categorie' => 'nullable|string',
         ]);
 
         $imagePath = null;
@@ -42,7 +41,6 @@ class PlatController extends Controller
             'description' => $request->description,
             'prix' => $request->prix,
             'image' => $imagePath,
-            'categorie' => $request->categorie
         ]);
 
         return response()->json($plat, 201);
