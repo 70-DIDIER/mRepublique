@@ -7,7 +7,7 @@
         <h2>Les plats disponible</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{{ route('plats.create') }}" class="btn btn-primary">AJOUTER</a>
+                <a href="{{ route('plats.create') }}" class="btn btn-primary" style="color: white">AJOUTER</a>
             </li>
             
         </ol>

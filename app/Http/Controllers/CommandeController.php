@@ -44,8 +44,8 @@ class CommandeController extends Controller
         $total = 0;
         $fraisLivraison = 0;
         // Coordonnées fixes du restaurant (à adapter si besoin)
-        $lat_restaurant = 6.202498662229028;
-        $lon_restaurant = 1.1944887730143288;
+        $lat_restaurant = 6.184575120133669;
+        $lon_restaurant = 1.2069011861319983;
         // Distance client ↔ restaurant
         $distance = $this->calculerDistance(
         $lat_restaurant,

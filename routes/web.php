@@ -10,14 +10,22 @@ use App\Http\Controllers\Admin\CommandeController;
 Route::get('/', function () {
     return view('auth.login');
 });
-
-Route::resource('boissons', BoissonController::class);
-Route::resource('plats', PlatController::class);
-
+// la route des connexions
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
-Route::get('/commandes', [CommandeController::class, 'index']);
-Route::resource('/commandes', CommandeController::class);
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
+
+    // la route du crud des plats et boisson!
+    Route::resource('boissons', BoissonController::class);
+    Route::resource('plats', PlatController::class);
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/commandes', [CommandeController::class, 'index']);
+    // Route::get('/commandes/{id}', [CommandeController::class, 'show'])->name('commandes.show');
+    // Route::get('/commandes/{id}/edit', [CommandeController::class, 'edit'])->name('commandes.edit');
+    // Route::put('/commandes/{id}', [CommandeController::class, 'update'])->name('commandes.update');
+    Route::delete('/commandes/{id}', [CommandeController::class, 'destroy'])->name('commandes.destroy');
+    Route::resource('/commandes', CommandeController::class);
+    Route::put('commandes/{commande}/status', [CommandeController::class, 'updateStatus'])->name('commandes.updateStatus');
+});

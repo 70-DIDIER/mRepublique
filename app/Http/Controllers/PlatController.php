@@ -12,6 +12,11 @@ class PlatController extends Controller
     {
         return Plat::all();
     }
+    // listes des plats par catégorie
+    public function platcategorie($categorie)
+    {
+        return Plat::where('categorie', $categorie)->get();
+    }
 
     // Afficher un plat spécifique
     public function show($id)

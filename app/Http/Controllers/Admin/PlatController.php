@@ -3,11 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Plat;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class PlatController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -44,7 +53,9 @@ class PlatController extends Controller
         // Gérer l'image
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            $image = $this->imageService->optimize($request->file('image'));
+            $imagePath = 'images/' . time() . '.jpg';
+            $this->imageService->save($image, storage_path('app/public/' . $imagePath));
         }
 
         // Créer le plat
@@ -98,7 +109,14 @@ class PlatController extends Controller
 
         // Gérer l'image
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            // Supprimer l'ancienne image si elle existe
+            if ($plat->image) {
+                Storage::disk('public')->delete($plat->image);
+            }
+
+            $image = $this->imageService->optimize($request->file('image'));
+            $imagePath = 'images/' . time() . '.jpg';
+            $this->imageService->save($image, storage_path('app/public/' . $imagePath));
             $plat->image = $imagePath;
         }
 

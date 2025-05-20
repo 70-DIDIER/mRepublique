@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\Boisson;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class BoissonController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     // Liste de toutes les boissons
     public function index(){
         $boissons = Boisson::all();
@@ -27,9 +35,12 @@ class BoissonController extends Controller
                     'prix' => 'required|numeric',
                     'image' => 'nullable|image|max:2048',
                 ]);
+
                 $imagePath = null;
                 if ($request->hasFile('image')) {
-                    $imagePath = $request->file('image')->store('images', 'public');
+                    $image = $this->imageService->optimize($request->file('image'));
+                    $imagePath = 'images/' . time() . '.jpg';
+                    $this->imageService->save($image, storage_path('app/public/' . $imagePath));
                 }
                 $boisson = Boisson::create([
                     'nom' => $request->nom,
@@ -58,7 +69,8 @@ class BoissonController extends Controller
         return view('boissons.update', compact('boissons'));
     }
     // modifier une boisson
-    public function update(Request $request, $id){
+    public function update(Request $request, string $id){
+        $boisson = Boisson::findOrFail($id);
         $request->validate([
             'nom' => 'sometimes|string',
             'categorie' => 'sometimes|string|nullable',
@@ -66,16 +78,37 @@ class BoissonController extends Controller
             'prix' => 'sometimes|numeric',
             'image' => 'nullable|image|max:2048',
         ]);
-        $boisson = Boisson::findOrFail($id);
-        // Gérer l'image
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $boisson->image = $imagePath;
+
+        // Initialiser les données à mettre à jour
+        $data = [];
+        if ($request->has('nom')) {
+            $data['nom'] = $request->nom;
+        }
+        if ($request->has('categorie')) {
+            $data['categorie'] = $request->categorie;
+        }
+        if ($request->has('description')) {
+            $data['description'] = $request->description;
+        }
+        if ($request->has('prix')) {
+            $data['prix'] = $request->prix;
         }
 
-        // Mettre à jour le plat
-        $boisson->update($request->only(['nom', 'categorie', 'description', 'prix']));
-        return redirect()->route('boissons.index')->with('success', 'Boisson modifiée avec succès');
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($boisson->image) {
+                Storage::disk('public')->delete($boisson->image);
+            }
+
+            $image = $this->imageService->optimize($request->file('image'));
+            $imagePath = 'images/' . time() . '.jpg';
+            $this->imageService->save($image, storage_path('app/public/' . $imagePath));
+            $data['image'] = $imagePath;
+        }
+
+        // Mettre à jour la boisson
+        $boisson->update($data);
+        return redirect()->route('boissons.index')->with('success', 'Boisson mise à jour avec succès');
     }
 
     // supprimer une boisson
