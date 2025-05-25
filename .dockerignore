@@ -1,0 +1,12 @@
+.git
+node_modules
+vendor
+docker-compose.yml
+*.log
+.env
+Dockerfile*
+.scribe
+# Évite tout ce qui concerne Scribe si tu ne veux pas l'utiliser dans le conteneur
+config/scribe.php
+resources/docs/
+public/docs/

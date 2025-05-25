@@ -9,10 +9,13 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    libzip-dev
+    libzip-dev \
+    libjpeg-dev \
+    libfreetype6-dev
 
-# Installation des extensions PHP
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Configuration et installation des extensions PHP, y compris GD avec support JPEG et FreeType
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Configuration PHP-FPM
 RUN echo "request_terminate_timeout = 300" >> /usr/local/etc/php-fpm.d/www.conf && \
@@ -25,17 +28,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier composer.json et composer.lock d'abord
-COPY composer.json composer.lock ./
-
-# Configurer Git pour éviter l'erreur de propriété
-RUN git config --global --add safe.directory /var/www/html
-
-# Installer les dépendances PHP (sans les dev dependencies)
-RUN composer install --no-dev --no-scripts --no-autoloader
-
-# Copier le reste des fichiers
+# Copier les fichiers du projet
 COPY . .
+
+# Installer les dépendances
+RUN composer install --no-dev --no-scripts --no-autoloader
 
 # Finaliser l'installation de composer
 RUN composer dump-autoload --optimize
