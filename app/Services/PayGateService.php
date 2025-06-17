@@ -20,7 +20,7 @@ class PayGateService
      */
     public function demanderPaiement($phoneNumber, $amount, $description, $identifier, $network)
     {
-        $response = Http::post($this->baseUrl . '/pay', [
+        $response = Http::timeout(180)->post($this->baseUrl . '/pay', [
             'auth_token' => $this->authToken,
             'phone_number' => $phoneNumber,
             'amount' => $amount,
@@ -37,7 +37,7 @@ class PayGateService
      */
     public function verifierPaiement($txReference)
     {
-        $response = Http::post($this->baseUrl . '/status', [
+        $response = Http::timeout(180)->post($this->baseUrl . '/status', [
             'auth_token' => $this->authToken,
             'tx_reference' => $txReference,
         ]);
