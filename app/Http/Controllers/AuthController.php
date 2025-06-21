@@ -13,11 +13,11 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'sometimes|nullable|string|email|unique:users',
-            'password' => 'required|string|confirmed',
-            'role' => 'required|in:client,livreur,admin',
+            'password' => 'required|string',
+            'role' => 'sometimes|nullable|string',
             'adresse' => 'sometimes|nullable|string',
             'telephone' => 'sometimes|nullable|string|unique:users,telephone',
-            'photo' => 'sometimes|nullable|string', 
+            'photo' => 'sometimes|nullable|string',
         ]);
         
 
@@ -25,7 +25,7 @@ class AuthController extends Controller
             'name' => $fields['name'],   
             'email' => $fields['email'] ?? null,
             'password' => bcrypt($fields['password']),
-            'role' => $fields['role'],
+            'role' => $fields['role'] ?? 'client',
             'adresse' => $fields['adresse'] ?? null,
             'telephone' => $fields['telephone'] ?? null,
             'photo' => $fields['photo'] ?? null,
@@ -85,14 +85,17 @@ class AuthController extends Controller
         if (now()->greaterThan($user->code_expires_at)) {
             return response()->json(['message' => 'Code expiré.'], 400);
         }
-
+        $token = $user->createToken('auth_token')->plainTextToken;
         // Valider l'utilisateur (par exemple changer un statut ou un champ is_verified)
         $user->is_verified = true; // ajoute ce champ dans ta table users si besoin
         $user->code_sms = null; // Nettoyer le code
         $user->code_expires_at = null; // Nettoyer l'expiration
         $user->save();
 
-        return response()->json(['message' => 'Compte vérifié avec succès.'], 200);
+        return response()->json([
+            'message' => 'Compte vérifié avec succès.',
+            'token' => $token,
+        ], 200);
     }
 
     public function login(Request $request)

@@ -27,9 +27,9 @@
               </a>
             </p>
             <p>
-              <strong>Localisation :</strong>
-              <a href="https://www.google.com/maps?q={{ $commande->latitude }},{{ $commande->longitude }}" target="_blank" rel="noopener noreferrer">
-                Voir la localisation
+              <strong>Nom du client :</strong>
+              <a href="https://wa.me/{{ preg_replace('/\D+/', '', $commande->user->telephone) }}" target="_blank" rel="noopener noreferrer">
+                {{ $commande->user->name }}
               </a>
             </p>
             <div class="mb-3">

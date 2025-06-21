@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\PlatController;
 use App\Http\Controllers\Auth\LoginController;
@@ -28,4 +29,9 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::delete('/commandes/{id}', [CommandeController::class, 'destroy'])->name('commandes.destroy');
     Route::resource('/commandes', CommandeController::class);
     Route::put('commandes/{commande}/status', [CommandeController::class, 'updateStatus'])->name('commandes.updateStatus');
+});
+
+Route::get('/create-link', function(){
+    Artisan::call('storage:link');
+    return 'Lien symbolique créé avec succès!';
 });
