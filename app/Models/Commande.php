@@ -22,6 +22,10 @@ class Commande extends Model
         'est_paye',
     ];
 
+    protected $casts = [
+        'est_paye' => 'boolean',
+    ];
+
     public function plats()
     {
         // Relation pour les plats commandés (où la colonne boisson_id est null)

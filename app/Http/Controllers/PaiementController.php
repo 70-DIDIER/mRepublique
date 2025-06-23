@@ -6,6 +6,7 @@ use App\Models\Commande;
 use App\Models\Paiement;
 use Illuminate\Http\Request;
 use App\Services\PayGateService;
+use Illuminate\Support\Facades\Log;
 
 class PaiementController extends Controller
 {
@@ -74,6 +75,8 @@ public function check($paiementId)
     $response = app(PayGateService::class)
                 ->verifierPaiement($paiement->transaction_id);
 
+    Log::info('Réponse PayGate check', $response);
+
     // Vérifie si le paiement est réussi (status == 0)
     if (isset($response['status']) && $response['status'] == 0) {
         $paiement->update([
@@ -82,9 +85,12 @@ public function check($paiementId)
         ]);
 
         $commande = $paiement->commande;
+        Log::info('Avant update check', ['commande_id' => $commande->id ?? null, 'est_paye' => $commande->est_paye ?? null]);
         if ($commande && !$commande->est_paye) {
             $commande->est_paye = true;
             $commande->save();
+            $commande->refresh();
+            Log::info('Après update check', ['commande_id' => $commande->id ?? null, 'est_paye' => $commande->est_paye ?? null]);
         }
 
         return response()->json([
@@ -102,6 +108,7 @@ public function check($paiementId)
 public function callback(Request $request)
 {
     $data = $request->all();
+    Log::info('Callback reçu', $data);
 
     $paiement = Paiement::where('transaction_id', $data['tx_reference'] ?? null)->first();
 
@@ -110,7 +117,11 @@ public function callback(Request $request)
             'statut' => 'effectue',
             'transaction_id' => $data['tx_reference'],
         ]);
-        $paiement->commande->update(['est_paye' => true]);
+        $commande = $paiement->commande;
+        Log::info('Avant update callback', ['commande_id' => $commande->id ?? null, 'est_paye' => $commande->est_paye ?? null]);
+        $commande->update(['est_paye' => true]);
+        $commande->refresh();
+        Log::info('Après update callback', ['commande_id' => $commande->id ?? null, 'est_paye' => $commande->est_paye ?? null]);
     }
 
     return response()->json(['message' => 'Callback reçu.']);
