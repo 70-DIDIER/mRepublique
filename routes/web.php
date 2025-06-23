@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\PlatController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\BoissonController;
 use App\Http\Controllers\Admin\CommandeController;
@@ -16,7 +17,8 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
-
+    // la route du crud des utilisateurs
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     // la route du crud des plats et boisson!
     Route::resource('boissons', BoissonController::class);
     Route::resource('plats', PlatController::class);
@@ -31,7 +33,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::put('commandes/{commande}/status', [CommandeController::class, 'updateStatus'])->name('commandes.updateStatus');
 });
 
-Route::get('/create-link', function(){
-    Artisan::call('storage:link');
-    return 'Lien symbolique créé avec succès!';
-});
+// Route::get('/create-link', function(){
+//     Artisan::call('storage:link');
+//     return 'Lien symbolique créé avec succès!';
+// });
