@@ -19,7 +19,7 @@ class Paiement extends Model
     }
     public function getStatutAttribute($value)
     {
-        return $this->attributes['statut'] = $value == 'en_attente' ? 'En attente' : 'Confirmé';
+        return $value == 'en_attente' ? 'En attente' : 'Confirmé';
     }
     public function getMethodeAttribute($value)
     {

@@ -19,6 +19,7 @@ class Commande extends Model
         'adresse_livraison',
         'frais_livraison',
         'commentaire',
+        'est_paye',
     ];
 
     public function plats()
