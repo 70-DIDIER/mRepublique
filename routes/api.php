@@ -14,6 +14,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/plats', [PlatController::class, 'index']);
 Route::get('/plats/categorie/{categorie}', [PlatController::class, 'platcategorie']);
 Route::get('/boissons', [BoissonController::class, 'index']);
+// Webhook (callback automatique de PayGate)
+Route::post('/paygate/callback', [PaiementController::class, 'callback']);
 
 Route::middleware(['auth:sanctum', 'role:client,admin'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
@@ -38,8 +40,6 @@ Route::middleware(['auth:sanctum', 'role:client,admin'])->group(function () {
     Route::put('/paiements/{id}', [PaiementController::class, 'updateStatus']);
     Route::get('/paiements/check/{id}', [PaiementController::class, 'check']);
     Route::get('/paiements/commande/{commandeId}', [PaiementController::class, 'show']);
-    // Webhook (callback automatique de PayGate)
-    Route::post('/paygate/callback', [PaiementController::class, 'callback']);
 
    
     
