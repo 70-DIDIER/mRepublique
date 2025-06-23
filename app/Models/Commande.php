@@ -41,4 +41,9 @@ class Commande extends Model
     {
     return $this->belongsTo(\App\Models\User::class);
     }
+
+    public function paiement()
+    {
+        return $this->hasOne(\App\Models\Paiement::class);
+    }
 }
