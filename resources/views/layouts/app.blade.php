@@ -42,16 +42,16 @@
                     <a href="index-2.html"><i class="fa fa-th-large"></i> <span class="nav-label">MENUS</span> <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a href="{{ route('plats.index') }}">voirs les plats</a></li>
-                        <li><a href="{{ route('boissons.index') }}">voir les boissons</a></li>
+                        {{-- <li><a href="{{ route('boissons.index') }}">voir les boissons</a></li> --}}
                         <li><a href="{{ route('commandes.index') }}">Les Commandes</a></li>
                         {{-- <li><a href="dashboard_4_1.html">Dashboard v.4</a></li>
                         <li><a href="dashboard_5.html">Dashboard v.5 </a></li> --}} 
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('users.index') }}"><i class="fa fa-diamond"></i> <span class="nav-label">Les Utilisateurs</span></a>
+                    <a href="{{ route('users.index') }}"><i class="fa fa-user"></i> <span class="nav-label">Les Utilisateurs</span></a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Statistique</span><span class="fa arrow"></span></a>
                     
                 </li>
@@ -63,7 +63,7 @@
                         <li><a href="mail_compose.html">Compose email</a></li>
                         <li><a href="email_template.html">Email templates</a></li>
                     </ul>
-                </li>
+                </li> --}}
             </ul>
 
         </div>
@@ -82,7 +82,7 @@
                 <li>
                     <span class="m-r-sm text-muted welcome-message">Bienvenue chez le restaurant Maison de la republique</span>
                 </li>
-                <li class="dropdown">
+                {{-- <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
                     </a>
@@ -176,7 +176,7 @@
                             </div>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
 
                 <li>
@@ -201,12 +201,12 @@
 
     <!-- Mainly scripts -->
     <script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
-<script src="{{ asset('js/popper.min.js') }}"></script>
-<script src="{{ asset('js/bootstrap.js') }}"></script>
-<script src="{{ asset('js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
-<script src="{{ asset('js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
-<script src="{{ asset('js/inspinia.js') }}"></script>
-<script src="{{ asset('js/plugins/pace/pace.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    <script src="{{ asset('js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+    <script src="{{ asset('js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('js/inspinia.js') }}"></script>
+    <script src="{{ asset('js/plugins/pace/pace.min.js') }}"></script>
 
 
 </body>
