@@ -9,7 +9,6 @@
             <li class="breadcrumb-item">
                 <a href="{{ route('plats.create') }}" class="btn btn-primary" style="color: white">AJOUTER</a>
             </li>
-            
         </ol>
     </div>
 </div>
@@ -27,7 +26,7 @@
         </div>
         <div class="col-8">
             <h3><strong>{{ $plat->nom }}</strong></h3>
-            <p><span class="btn btn-sm btn-primary">{{ number_format($plat->prix, 2) }} F CFA</span></p>
+            <p><span class="btn btn-sm btn-primary">{{ number_format($plat->prix, 0, '.', ',') }} F CFA</span></p>
             <address>
                 {{ Str::limit($plat->description, 50) }}
             </address>

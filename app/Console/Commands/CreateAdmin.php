@@ -23,12 +23,12 @@ class CreateAdmin extends Command
         }
 
         $password = $this->secret('Mot de passe');
-        $confirmPassword = $this->secret('Confirmer le mot de passe');
+        // $confirmPassword = $this->secret('Confirmer le mot de passe');
 
-        if ($password !== $confirmPassword) {
-            $this->error("Les mots de passe ne correspondent pas.");
-            return;
-        }
+        // if ($password !== $confirmPassword) {
+        //     $this->error("Les mots de passe ne correspondent pas.");
+        //     return;
+        // }
 
         // Création de l'utilisateur
         $user = User::create([
