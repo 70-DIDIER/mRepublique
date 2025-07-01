@@ -35,7 +35,7 @@ class AuthController extends Controller
         if (!empty($fields['telephone'])) {
             $code = random_int(1000, 9999);
             $user->code_sms = $code;
-            $user->code_expires_at = now()->addMinutes(10);
+            $user->code_expires_at = now()->addMinutes(30);
             $user->save();
             
             $numero = $user->telephone;

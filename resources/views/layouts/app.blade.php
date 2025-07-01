@@ -52,11 +52,13 @@
                 <li>
                     <a href="{{ route('users.index') }}"><i class="fa fa-user"></i> <span class="nav-label">Les Utilisateurs</span></a>
                 </li>
-                {{-- <li>
-                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Statistique</span><span class="fa arrow"></span></a>
-                    
-                </li>
                 <li>
+                    <a href="{{ route('livreur.index') }}"><i class="fa fa-drivers-license" aria-hidden="true"></i></i> <span class="nav-label">Les livreurs</span></a>
+                </li>
+                {{-- <li>
+                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Livreur</span><span class="fa arrow"></span></a>
+                </li> --}}
+                {{-- <li>
                     <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Livreurs</span><span class="label label-warning float-right">16/24</span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a href="mailbox.html">Inbox</a></li>
@@ -64,7 +66,7 @@
                         <li><a href="mail_compose.html">Compose email</a></li>
                         <li><a href="email_template.html">Email templates</a></li>
                     </ul>
-                </li> --}}
+                </li> --}} 
             </ul>
 
         </div>

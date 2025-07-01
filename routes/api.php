@@ -44,6 +44,8 @@ Route::middleware(['auth:sanctum', 'role:client,admin'])->group(function () {
    
     
 });
+
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/livraisons', [LivraisonController::class, 'toutes']); // admin
 
@@ -54,6 +56,8 @@ Route::middleware(['auth:sanctum', 'role:livreur,admin'])->group(function () {
      Route::post('/livraisons/prendre/{commandeId}', [LivraisonController::class, 'prendre']);
      Route::post('/livraisons/livrer/{id}', [LivraisonController::class, 'livrer']);
      Route::get('/livraisons/mes', [LivraisonController::class, 'mesLivraisons']);
+    //  la route pour voir toutes les commandes
+     Route::get('/commandes', [CommandeController::class, 'toutes']);
 });
 
 // // les routes pour demander un paiement

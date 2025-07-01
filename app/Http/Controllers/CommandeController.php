@@ -172,4 +172,10 @@ class CommandeController extends Controller
         $commande = Commande::with('plats')->findOrFail($id);
         return response()->json($commande);
     }
+    // voir toutes les commandes
+    public function toutes(){
+        $commandes = Commande::with('user', 'plats')->orderBy('created_at', 'desc')->get();
+
+        return response()->json($commandes);
+    }
 }

@@ -14,5 +14,6 @@ class UserController extends Controller
         // Par exemple, retourner tous les utilisateurs
         $users = User::all();
         return view('users.index', compact('users'));
-    }
+    } 
+   
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PlatController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\BoissonController;
+use App\Http\Controllers\Admin\LivreurController;
 use App\Http\Controllers\Admin\CommandeController;
 
 Route::get('/', function () {
@@ -31,9 +32,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::delete('/commandes/{id}', [CommandeController::class, 'destroy'])->name('commandes.destroy');
     Route::resource('/commandes', CommandeController::class);
     Route::put('commandes/{commande}/status', [CommandeController::class, 'updateStatus'])->name('commandes.updateStatus');
+    // la route pour gérer les livreurs
+    Route::resource('livreur', LivreurController::class);
 });
 
-// Route::get('/create-link', function(){
-//     Artisan::call('storage:link');
-//     return 'Lien symbolique créé avec succès!';
-// });
