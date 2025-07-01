@@ -17,7 +17,7 @@ Route::get('/boissons', [BoissonController::class, 'index']);
 // Webhook (callback automatique de PayGate)
 Route::post('/paygate/callback', [PaiementController::class, 'callback']);
 
-Route::middleware(['auth:sanctum', 'role:client,admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:client,admin,livreur'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/plats', [PlatController::class, 'store']);
