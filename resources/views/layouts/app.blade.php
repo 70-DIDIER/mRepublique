@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Empty Page</title>
+    <title>Restaurant | M'Republique</title>
 
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
@@ -44,8 +44,9 @@
                         <li><a href="{{ route('plats.index') }}">voirs les plats</a></li>
                         <li><a href="{{ route('boissons.index') }}">voir les boissons</a></li>
                         <li><a href="{{ route('commandes.index') }}">Les Commandes</a></li>
+                        <li><a href="{{ route('livreurs.index') }}">Les Livreurs</a></li>
                         {{-- <li><a href="dashboard_4_1.html">Dashboard v.4</a></li>
-                        <li><a href="dashboard_5.html">Dashboard v.5 </a></li> --}} 
+                        <li><a href="dashboard_5.html">Dashboard v.5 </a></li> --}}
                     </ul>
                 </li>
                 <li>
@@ -53,7 +54,7 @@
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Statistique</span><span class="fa arrow"></span></a>
-                    
+
                 </li>
                 <li>
                     <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Livreurs</span><span class="label label-warning float-right">16/24</span></a>
@@ -193,9 +194,9 @@
         <div class="mb-5">
             @yield('content')
         </div>
-       
-            
-             
+
+
+
         </div>
         </div>
 

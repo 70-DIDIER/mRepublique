@@ -17,12 +17,12 @@ class AuthController extends Controller
             'role' => 'required|in:client,livreur,admin',
             'adresse' => 'sometimes|nullable|string',
             'telephone' => 'sometimes|nullable|string|unique:users,telephone',
-            'photo' => 'sometimes|nullable|string', 
+            'photo' => 'sometimes|nullable|string',
         ]);
-        
+
 
         $user = User::create([
-            'name' => $fields['name'],   
+            'name' => $fields['name'],
             'email' => $fields['email'] ?? null,
             'password' => bcrypt($fields['password']),
             'role' => $fields['role'],
@@ -37,7 +37,7 @@ class AuthController extends Controller
             $user->code_sms = $code;
             $user->code_expires_at = now()->addMinutes(10);
             $user->save();
-            
+
             $numero = $user->telephone;
             // Ajouter automatiquement 228 si ce n'est pas déjà présent
             if (!str_starts_with($numero, '228')) {
@@ -45,16 +45,16 @@ class AuthController extends Controller
             }
             // Préparer le message
             $message = "Bienvenue chez le restaurant M'Republique !!! Veuillez activer votre compte avec le code d'activation suivant : $code";
-        
+
             // Envoyer le SMS
             app(AfrikSmsService::class)->sendSms($numero, $message);
-        
+
             return response()->json([
                 'message' => 'Utilisateur enregistré. Un code de confirmation a été envoyé par SMS.',
                 'user' => $user
             ], 201);
         }
-        
+
         // Si l'inscription s'est faite avec email (sans téléphone), ne pas envoyer de code
         return response()->json([
             'message' => 'Utilisateur enregistré.',

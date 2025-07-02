@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\PlatController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\BoissonController;
 use App\Http\Controllers\Admin\CommandeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\LivreurController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -22,6 +25,12 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/commandes', [CommandeController::class, 'index']);
+    Route::post('/livreurs', [AuthController::class, 'register'])->name('livreurs.register');
+    Route::get('/livreurs/create', [LivreurController::class, 'create'])->name('livreurs.create');
+    Route::get('/livreurs', [LivreurController::class, 'index'])->name('livreurs.index');
+    Route::get('/livreurs/{id}/edit', [LivreurController::class, 'edit'])->name('livreurs.edit');
+    Route::delete('/livreurs/{id}', [LivreurController::class, 'destroy'])->name('livreurs.destroy');
+    Route::put('/livreurs/{livreur}', [LivreurController::class, 'update'])->name('livreurs.update');
     // Route::get('/commandes/{id}', [CommandeController::class, 'show'])->name('commandes.show');
     // Route::get('/commandes/{id}/edit', [CommandeController::class, 'edit'])->name('commandes.edit');
     // Route::put('/commandes/{id}', [CommandeController::class, 'update'])->name('commandes.update');
