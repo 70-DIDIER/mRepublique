@@ -174,8 +174,11 @@ class CommandeController extends Controller
     }
     // voir toutes les commandes
     public function toutes(){
-        $commandes = Commande::with('user', 'plats')->orderBy('created_at', 'desc')->get();
-
+        $commandes = Commande::with('user', 'plats')
+            ->where('statut', 'en_cours')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return response()->json($commandes);
     }
+    
 }
