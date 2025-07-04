@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CommandeReçueAdminMail;
 use App\Models\Commande;
 use App\Models\Plat;
 use App\Models\Boisson;
@@ -133,6 +136,9 @@ class CommandeController extends Controller
             }
 
             DB::commit();
+            
+
+            Mail::to('admin@mrepublique.com')->send(new CommandeReçueAdminMail($commande));
 
             return response()->json([
                 'message' => 'Commande passée avec succès',

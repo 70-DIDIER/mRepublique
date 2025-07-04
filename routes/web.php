@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AdminController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\BoissonController;
 use App\Http\Controllers\Admin\LivreurController;
 use App\Http\Controllers\Admin\CommandeController;
-
+use App\Mail\CommandeReçueAdminMail;
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -36,3 +37,9 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::resource('livreur', LivreurController::class);
 });
 
+
+Route::get('/test-mail', function () {
+    $commande = \App\Models\Commande::latest()->with('user')->first();
+    Mail::to('admin@mrepublique.com')->send(new CommandeReçueAdminMail($commande));
+    return 'Mail envoyé !';
+});
