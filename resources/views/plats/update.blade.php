@@ -24,9 +24,16 @@
          </div>
 
          <div class="mb-3">
-             <label for="categorie" class="form-label">Catégorie</label>
-             <input type="text" class="form-control" id="categorie" name="categorie" value="{{ old('categorie', $plat->categorie) }}" required>
-         </div>
+            <label for="categorie" class="form-label">Catégorie</label>
+            <select class="form-select" id="categorie" name="categorie" required>
+                <option value="" disabled selected>Choisir une catégorie</option>
+                @foreach(\App\Models\Plat::CATEGORIES as $cat)
+                    <option value="{{ $cat }}" {{ old('categorie') === $cat ? 'selected' : '' }}>
+                        {{ ucfirst($cat) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
          <div class="mb-3">
              <label for="description" class="form-label">Description</label>
