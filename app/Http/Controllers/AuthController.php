@@ -43,7 +43,7 @@ class AuthController extends Controller
             if (!str_starts_with($numero, '228')) {
                 $numero = '228' . ltrim($numero, '0'); // Supprime 0 devant
             }
-            // Préparer le message
+            //  le message
             $message = "Bienvenue chez le restaurant M'Republique !!! Veuillez activer votre compte avec le code d'activation suivant : $code";
         
             // Envoyer le SMS

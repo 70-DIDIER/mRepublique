@@ -35,11 +35,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::put('commandes/{commande}/status', [CommandeController::class, 'updateStatus'])->name('commandes.updateStatus');
     // la route pour gérer les livreurs
     Route::resource('livreur', LivreurController::class);
+    // pour activer et desactiver les plats
+    Route::patch('/plats/{id}/toggle', [PlatController::class, 'toggle'])->name('plats.toggle');
+    // pour voir les plats par catégorie
+    Route::get('/plats/categorie/{categorie}', [App\Http\Controllers\Admin\PlatController::class, 'platcategorie'])->name('plats.categorie');
 });
 
 
-Route::get('/test-mail', function () {
-    $commande = \App\Models\Commande::latest()->with('user')->first();
-    Mail::to('admin@mrepublique.com')->send(new CommandeReçueAdminMail($commande));
-    return 'Mail envoyé !';
-});

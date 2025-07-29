@@ -13,6 +13,19 @@ class Plat extends Model
         'prix',
         'image',
         'catégorie',
+        'is_active',
+    ];
+    const CATEGORIES = [
+        'Entrée',
+        'Résistance',
+        'Déssert',
+        'Rafraîchissement',
+        'Petit déjeuner',
+        'Plats locaux',
+        'dinner',
+        'coktail',
+        'soda',
+        'grillade & brochettes',
     ];
 
     // Pour exposer l’URL de l’image

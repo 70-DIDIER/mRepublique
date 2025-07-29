@@ -14,6 +14,7 @@
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
 <div class="row">
+    
     @foreach ($plats as $plat )
     <div class="col-lg-4">
     <div class="contact-box">
@@ -27,9 +28,20 @@
         <div class="col-8">
             <h3><strong>{{ $plat->nom }}</strong></h3>
             <p><span class="btn btn-sm btn-primary">{{ number_format($plat->prix, 0, '.', ',') }} F CFA</span></p>
-            <address>
+           <address>
                 {{ Str::limit($plat->description, 50) }}
             </address>
+
+            <form method="POST" action="{{ route('plats.toggle', $plat->id) }}">
+                @csrf
+                @method('PATCH')
+                @if ($plat->is_active)
+                    <button type="submit" class="btn btn-sm btn-danger">Désactiver</button>
+                @else
+                    <button type="submit" class="btn btn-sm btn-success">Activer</button>
+                @endif
+            </form>
+
             
         </div>
             </a>

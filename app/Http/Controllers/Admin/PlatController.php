@@ -24,9 +24,16 @@ class PlatController extends Controller
     {
         // Récupérer tous les plats
         $plats = Plat::all();
-        return view('plats.index', compact('plats'));
+        $categories = Plat::select('categorie')->distinct()->pluck('categorie');
+        return view('plats.index', compact('plats', 'categories'));
     }
 
+    public function platcategorie($categorie)
+    {
+        $plats = Plat::where('categorie', $categorie)->get();
+        $categories = Plat::select('categorie')->distinct()->pluck('categorie');
+        return view('plats.index', compact('plats', 'categories'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -137,4 +144,15 @@ class PlatController extends Controller
 
         return redirect()->route('plats.index')->with('success', 'Plat supprimé avec succès');
     }
+
+    // pour activer et désactiver les plats
+        public function toggle($id)
+    {
+        $plat = Plat::findOrFail($id);
+        $plat->is_active = !$plat->is_active;
+        $plat->save();
+
+        return back()->with('success', 'Statut du plat mis à jour.');
+    }
+
 }
