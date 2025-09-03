@@ -22,13 +22,41 @@ class CommandeController extends Controller
         return $rayon * $c;
     }
     
-    public function index()
-    {
-        // Coordonnées fixes du restaurant 
+    // public function index()
+    // {
+    //     // Coordonnées fixes du restaurant 
+    // $lat_restaurant = 6.184575120133669;
+    // $lon_restaurant = 1.2069011861319983;
+    // $perPage = 10;
+    // $commandes = Commande::with(['plats', 'boissons', 'user'])->orderBy('created_at', 'desc')->get()->map(function ($commande) use ($lat_restaurant, $lon_restaurant) {
+    //     $distance = $this->calculerDistance(
+    //         $lat_restaurant,
+    //         $lon_restaurant,
+    //         $commande->latitude,
+    //         $commande->longitude
+    //     );
+    //     $commande->distance_estimee = round($distance, 2) . ' km';
+    //     return $commande;
+    // });
+
+    // return view('commandes.index', compact('commandes'));
+    // }
+
+public function index()
+{
+    // Coordonnées fixes du restaurant 
     $lat_restaurant = 6.184575120133669;
     $lon_restaurant = 1.2069011861319983;
 
-    $commandes = Commande::with(['plats', 'boissons', 'user'])->orderBy('created_at', 'desc')->get()->map(function ($commande) use ($lat_restaurant, $lon_restaurant) {
+    // Nombre d’éléments par page
+    $perPage = 6;
+
+    // 1. On récupère un paginator au lieu d’une collection brute
+    $paginator = Commande::with(['plats', 'boissons', 'user'])
+        ->orderBy('created_at', 'desc')
+        ->paginate($perPage);
+    // 2. On transforme chaque modèle dans la collection paginée
+    $paginator->getCollection()->transform(function ($commande) use ($lat_restaurant, $lon_restaurant) {
         $distance = $this->calculerDistance(
             $lat_restaurant,
             $lon_restaurant,
@@ -39,8 +67,12 @@ class CommandeController extends Controller
         return $commande;
     });
 
-    return view('commandes.index', compact('commandes'));
-    }
+    // 3. On passe le paginator à la vue
+    return view('commandes.index', ['commandes' => $paginator]);
+}
+
+
+
     public function show($id)
     {
         $commande = Commande::with(['plats', 'boissons', 'user'])->findOrFail($id);

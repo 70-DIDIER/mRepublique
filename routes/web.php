@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PlatController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
     Route::resource('plats', PlatController::class);
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/commandes', [CommandeController::class, 'index']);
     // Route::get('/commandes/{id}', [CommandeController::class, 'show'])->name('commandes.show');
     // Route::get('/commandes/{id}/edit', [CommandeController::class, 'edit'])->name('commandes.edit');

@@ -8,11 +8,13 @@ class PayGateService
 {
     protected $authToken;
     protected $baseUrl;
+    protected $callbackUrl;
 
     public function __construct()
     {
         $this->authToken = env('PAYGATE_AUTH_TOKEN'); // On va le mettre dans .env
         $this->baseUrl = 'https://paygateglobal.com/api/v1'; // Base URL
+        $this->callbackUrl = env('PAYGATE_CALLBACK_URL'); // URL de callback
     }
 
     /**
@@ -22,6 +24,7 @@ class PayGateService
     {
         $response = Http::timeout(300)->post($this->baseUrl . '/pay', [
             'auth_token' => $this->authToken,
+            'callback_url' => $this->callbackUrl, // URL de callback
             'phone_number' => $phoneNumber,
             'amount' => $amount,
             'description' => $description,
