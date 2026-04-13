@@ -2,8 +2,8 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Commande;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class CommandesChartWidget extends ChartWidget
 {
@@ -24,37 +24,44 @@ class CommandesChartWidget extends ChartWidget
 
     protected function getData(): array
     {
+        $debut = now()->subDays(13)->startOfDay();
+
+        // ── 1 seule requête GROUP BY jour ──────────────────────────────────
+        $rows = DB::select("
+            SELECT
+                DATE(created_at) AS jour,
+                COUNT(*) AS nb,
+                SUM(CASE WHEN est_paye = 1 THEN montant_total ELSE 0 END) AS ca
+            FROM commandes
+            WHERE created_at >= ?
+            GROUP BY DATE(created_at)
+        ", [$debut]);
+
+        $map    = collect($rows)->keyBy('jour');
         $labels = [];
         $data   = [];
+        $isCA   = $this->filter === 'ca';
 
         for ($i = 13; $i >= 0; $i--) {
             $date     = now()->subDays($i);
+            $key      = $date->toDateString();
             $labels[] = $date->translatedFormat('D d/m');
-
-            if ($this->filter === 'ca') {
-                $data[] = (int) Commande::where('est_paye', true)
-                    ->whereDate('created_at', $date)
-                    ->sum('montant_total');
-            } else {
-                $data[] = Commande::whereDate('created_at', $date)->count();
-            }
+            $data[]   = $isCA
+                ? (int) ($map[$key]->ca ?? 0)
+                : (int) ($map[$key]->nb ?? 0);
         }
 
-        $isCA = $this->filter === 'ca';
-
         return [
-            'datasets' => [
-                [
-                    'label'                => $isCA ? "CA (F CFA)" : 'Commandes',
-                    'data'                 => $data,
-                    'borderColor'          => '#2B7A9E',
-                    'backgroundColor'      => 'rgba(43, 122, 158, 0.08)',
-                    'fill'                 => true,
-                    'tension'              => 0.4,
-                    'pointBackgroundColor' => '#2B7A9E',
-                    'pointRadius'          => 4,
-                ],
-            ],
+            'datasets' => [[
+                'label'                => $isCA ? 'CA (F CFA)' : 'Commandes',
+                'data'                 => $data,
+                'borderColor'          => '#2B7A9E',
+                'backgroundColor'      => 'rgba(43, 122, 158, 0.08)',
+                'fill'                 => true,
+                'tension'              => 0.4,
+                'pointBackgroundColor' => '#2B7A9E',
+                'pointRadius'          => 4,
+            ]],
             'labels' => $labels,
         ];
     }

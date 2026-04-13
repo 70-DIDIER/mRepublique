@@ -16,98 +16,111 @@ class StatsOverviewWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $aujourd = now();
-        $debutMois = $aujourd->copy()->startOfMonth();
-        $debutMoisPasse = $aujourd->copy()->subMonth()->startOfMonth();
-        $finMoisPasse = $aujourd->copy()->subMonth()->endOfMonth();
+        $debutMois      = now()->startOfMonth();
+        $debutMoisPasse = now()->subMonth()->startOfMonth();
+        $finMoisPasse   = now()->subMonth()->endOfMonth();
 
-        // Commandes
-        $commandesMois = Commande::whereBetween('created_at', [$debutMois, $aujourd])->count();
-        $commandesMoisPasse = Commande::whereBetween('created_at', [$debutMoisPasse, $finMoisPasse])->count();
-        $tendanceCommandes = $commandesMoisPasse > 0
-            ? round((($commandesMois - $commandesMoisPasse) / $commandesMoisPasse) * 100)
+        // ── 1 requête : tous les agrégats commandes en une fois ──────────────
+        $stats = DB::selectOne("
+            SELECT
+                COUNT(*) AS total_commandes,
+                SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) AS commandes_mois,
+                SUM(CASE WHEN created_at BETWEEN ? AND ? THEN 1 ELSE 0 END) AS commandes_mois_passe,
+                SUM(CASE WHEN est_paye = 1 AND created_at >= ? THEN montant_total ELSE 0 END) AS ca_mois,
+                SUM(CASE WHEN est_paye = 1 AND created_at BETWEEN ? AND ? THEN montant_total ELSE 0 END) AS ca_mois_passe,
+                SUM(CASE WHEN statut = 'en_attente' THEN 1 ELSE 0 END) AS en_attente
+            FROM commandes
+        ", [
+            $debutMois,
+            $debutMoisPasse, $finMoisPasse,
+            $debutMois,
+            $debutMoisPasse, $finMoisPasse,
+        ]);
+
+        // ── 1 requête : livraisons ──────────────────────────────────────────
+        $livraisons = DB::selectOne("
+            SELECT
+                SUM(CASE WHEN statut = 'en_chemin' THEN 1 ELSE 0 END) AS en_cours,
+                SUM(CASE WHEN statut = 'livree' AND created_at >= ? THEN 1 ELSE 0 END) AS livrees_mois
+            FROM livraisons
+        ", [$debutMois]);
+
+        // ── 1 requête : clients ─────────────────────────────────────────────
+        $clients = DB::selectOne("
+            SELECT
+                COUNT(*) AS total,
+                SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) AS nouveaux_mois
+            FROM users WHERE role = 'client'
+        ", [$debutMois]);
+
+        // ── 1 requête : plat populaire ──────────────────────────────────────
+        $platPopulaire = DB::selectOne("
+            SELECT p.nom, SUM(cp.quantite) AS total
+            FROM commande_plat cp
+            JOIN plats p ON cp.plat_id = p.id
+            WHERE cp.boisson_id IS NULL
+            GROUP BY p.id, p.nom
+            ORDER BY total DESC
+            LIMIT 1
+        ");
+
+        // ── 1 requête : sparklines 7 jours (commandes + CA) ────────────────
+        $sparkRows = DB::select("
+            SELECT
+                DATE(created_at) AS jour,
+                COUNT(*) AS nb,
+                SUM(CASE WHEN est_paye = 1 THEN montant_total ELSE 0 END) AS ca
+            FROM commandes
+            WHERE created_at >= ?
+            GROUP BY DATE(created_at)
+        ", [now()->subDays(6)->startOfDay()]);
+
+        $sparkMap = collect($sparkRows)->keyBy('jour');
+        $sparkNb  = [];
+        $sparkCa  = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $day       = now()->subDays($i)->toDateString();
+            $sparkNb[] = (int) ($sparkMap[$day]->nb ?? 0);
+            $sparkCa[] = (int) ($sparkMap[$day]->ca ?? 0);
+        }
+
+        // ── Calcul tendances ────────────────────────────────────────────────
+        $tendanceCmd = $stats->commandes_mois_passe > 0
+            ? round((($stats->commandes_mois - $stats->commandes_mois_passe) / $stats->commandes_mois_passe) * 100)
             : 0;
-
-        // Chiffre d'affaires
-        $caMois = Commande::where('est_paye', true)
-            ->whereBetween('created_at', [$debutMois, $aujourd])
-            ->sum('montant_total');
-        $caMoisPasse = Commande::where('est_paye', true)
-            ->whereBetween('created_at', [$debutMoisPasse, $finMoisPasse])
-            ->sum('montant_total');
-        $tendanceCa = $caMoisPasse > 0
-            ? round((($caMois - $caMoisPasse) / $caMoisPasse) * 100)
+        $tendanceCa = $stats->ca_mois_passe > 0
+            ? round((($stats->ca_mois - $stats->ca_mois_passe) / $stats->ca_mois_passe) * 100)
             : 0;
-
-        // Livraisons en cours
-        $livraisonsEnCours = Livraison::where('statut', 'en_chemin')->count();
-        $livraisonsTerminees = Livraison::where('statut', 'livree')
-            ->whereBetween('created_at', [$debutMois, $aujourd])
-            ->count();
-
-        // Clients
-        $clients = User::where('role', 'client')->count();
-        $nouveauxClients = User::where('role', 'client')
-            ->whereBetween('created_at', [$debutMois, $aujourd])
-            ->count();
-
-        // Plat populaire
-        $platPopulaire = DB::table('commande_plat')
-            ->join('plats', 'commande_plat.plat_id', '=', 'plats.id')
-            ->whereNull('commande_plat.boisson_id')
-            ->select('plats.nom', DB::raw('SUM(commande_plat.quantite) as total'))
-            ->groupBy('plats.id', 'plats.nom')
-            ->orderByDesc('total')
-            ->first();
-
-        // Commandes en attente
-        $enAttente = Commande::where('statut', 'en_attente')->count();
-
-        // Sparkline 7 derniers jours pour commandes
-        $sparkCommandes = collect(range(6, 0))->map(
-            fn ($i) => Commande::whereDate('created_at', now()->subDays($i))->count()
-        )->toArray();
-
-        // Sparkline CA 7 jours
-        $sparkCa = collect(range(6, 0))->map(
-            fn ($i) => (int) Commande::where('est_paye', true)
-                ->whereDate('created_at', now()->subDays($i))
-                ->sum('montant_total')
-        )->toArray();
 
         return [
-            Stat::make('Commandes ce mois', $commandesMois)
-                ->description($tendanceCommandes >= 0
-                    ? "+{$tendanceCommandes}% vs mois dernier"
-                    : "{$tendanceCommandes}% vs mois dernier")
-                ->descriptionIcon($tendanceCommandes >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
-                ->color($tendanceCommandes >= 0 ? 'success' : 'danger')
-                ->chart($sparkCommandes)
+            Stat::make('Commandes ce mois', (int) $stats->commandes_mois)
+                ->description($tendanceCmd >= 0 ? "+{$tendanceCmd}% vs mois dernier" : "{$tendanceCmd}% vs mois dernier")
+                ->descriptionIcon($tendanceCmd >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->color($tendanceCmd >= 0 ? 'success' : 'danger')
+                ->chart($sparkNb)
                 ->icon('heroicon-o-shopping-cart'),
 
-            Stat::make("CA du mois (F CFA)", number_format($caMois, 0, ',', ' '))
-                ->description($tendanceCa >= 0
-                    ? "+{$tendanceCa}% vs mois dernier"
-                    : "{$tendanceCa}% vs mois dernier")
+            Stat::make('CA du mois (F CFA)', number_format((int) $stats->ca_mois, 0, ',', ' '))
+                ->description($tendanceCa >= 0 ? "+{$tendanceCa}% vs mois dernier" : "{$tendanceCa}% vs mois dernier")
                 ->descriptionIcon($tendanceCa >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($tendanceCa >= 0 ? 'success' : 'danger')
                 ->chart($sparkCa)
                 ->icon('heroicon-o-banknotes'),
 
-            Stat::make('Livraisons en cours', $livraisonsEnCours)
-                ->description("{$livraisonsTerminees} livrées ce mois")
+            Stat::make('Livraisons en cours', (int) ($livraisons->en_cours ?? 0))
+                ->description(($livraisons->livrees_mois ?? 0) . ' livrées ce mois')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('info')
                 ->icon('heroicon-o-truck'),
 
-            Stat::make('Commandes en attente', $enAttente)
+            Stat::make('Commandes en attente', (int) $stats->en_attente)
                 ->description('À traiter')
                 ->descriptionIcon('heroicon-m-clock')
-                ->color($enAttente > 0 ? 'warning' : 'success')
+                ->color($stats->en_attente > 0 ? 'warning' : 'success')
                 ->icon('heroicon-o-clock'),
 
-            Stat::make('Clients inscrits', $clients)
-                ->description("+{$nouveauxClients} ce mois")
+            Stat::make('Clients inscrits', (int) $clients->total)
+                ->description('+' . (int) $clients->nouveaux_mois . ' ce mois')
                 ->descriptionIcon('heroicon-m-user-plus')
                 ->color('primary')
                 ->icon('heroicon-o-users'),

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Commande;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class StatutsCommandesWidget extends ChartWidget
 {
@@ -14,27 +14,26 @@ class StatutsCommandesWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $statuts = [
-            'en_attente' => Commande::where('statut', 'en_attente')->count(),
-            'en_cours'   => Commande::where('statut', 'en_cours')->count(),
-            'livree'     => Commande::where('statut', 'livree')->count(),
-            'annulee'    => Commande::where('statut', 'annulee')->count(),
-        ];
+        // ── 1 seule requête GROUP BY statut ────────────────────────────────
+        $rows = DB::select("
+            SELECT statut, COUNT(*) AS nb
+            FROM commandes
+            GROUP BY statut
+        ");
+
+        $map = collect($rows)->keyBy('statut');
+
+        $statuts = ['en_attente', 'en_cours', 'livree', 'annulee'];
+        $labels  = ['En attente', 'En cours', 'Livrée', 'Annulée'];
+        $colors  = ['#F59E0B', '#2B7A9E', '#10B981', '#EF4444'];
 
         return [
-            'datasets' => [
-                [
-                    'data'            => array_values($statuts),
-                    'backgroundColor' => [
-                        '#F59E0B', // en_attente — amber
-                        '#2B7A9E', // en_cours — bleu
-                        '#10B981', // livree — vert
-                        '#EF4444', // annulee — rouge
-                    ],
-                    'hoverOffset' => 6,
-                ],
-            ],
-            'labels' => ['En attente', 'En cours', 'Livrée', 'Annulée'],
+            'datasets' => [[
+                'data'            => array_map(fn ($s) => (int) ($map[$s]->nb ?? 0), $statuts),
+                'backgroundColor' => $colors,
+                'hoverOffset'     => 6,
+            ]],
+            'labels' => $labels,
         ];
     }
 
