@@ -186,5 +186,14 @@ class CommandeController extends Controller
             ->get();
         return response()->json($commandes);
     }
-    
+    // les commandes d'un utilisateur
+    public function commandesUser($userId){
+        $commandes = Commande::with('plats')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc'
+            )
+            ->get();
+        return response()->json($commandes);
+
+    } 
 }

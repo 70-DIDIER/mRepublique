@@ -11,6 +11,7 @@ class Paiement extends Model
         'methode',
         'statut',
         'transaction_id',
+        'identifier',
     ];
 
     public function commande()

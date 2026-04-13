@@ -12,7 +12,7 @@ class Commande extends Model
     protected $fillable = [
         'user_id',
         'statut',
-        'total',
+        'montant_total',
         'type_livraison',
         'latitude',
         'longitude',

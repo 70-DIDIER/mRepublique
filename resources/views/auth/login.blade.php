@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <input type="password" name="password" class="form-control" placeholder="Mot de passe" required>
                 </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+                <button type="submit" class="btn btn-primary block full-width m-b">connexion</button>
             </form>
         </div>
     </div>
