@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "d1f87097-9e40-403b-94cf-e3913d5f4f44"
+      }
+    },
+    "android": {
+      "package": "com.kguinwogbegno.mrepublique"
+    }
+  }
+}

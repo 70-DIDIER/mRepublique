@@ -16,7 +16,7 @@ class Plat extends Model
         'is_active',
     ];
     const CATEGORIES = [
-        'Entrée',
+        'Entrées',
         'Résistance',
         'Déssert',
         'Rafraîchissement',
