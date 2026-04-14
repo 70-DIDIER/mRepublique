@@ -178,12 +178,31 @@ class CommandeController extends Controller
         $commande = Commande::with('plats')->findOrFail($id);
         return response()->json($commande);
     }
-    // voir toutes les commandes
+    // voir toutes les commandes disponibles (en_cours et non encore prises par un livreur)
     public function toutes(){
+        $lat_restaurant = 6.184575120133669;
+        $lon_restaurant = 1.2069011861319983;
+
         $commandes = Commande::with('user', 'plats')
             ->where('statut', 'en_cours')
+            ->whereDoesntHave('livraison')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($commande) use ($lat_restaurant, $lon_restaurant) {
+                if ($commande->latitude && $commande->longitude) {
+                    $commande->distance = round(
+                        $this->calculerDistance(
+                            $lat_restaurant, $lon_restaurant,
+                            $commande->latitude, $commande->longitude
+                        ),
+                        2
+                    );
+                } else {
+                    $commande->distance = null;
+                }
+                return $commande;
+            });
+
         return response()->json($commandes);
     }
     // les commandes d'un utilisateur

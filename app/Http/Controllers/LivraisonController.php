@@ -18,21 +18,26 @@ class LivraisonController extends Controller
             return response()->json(['message' => 'Accès refusé.'], 403);
         }
 
-        $commande = Commande::findOrFail($commandeId);
+        $commande = Commande::with(['user', 'plats'])->findOrFail($commandeId);
 
-        // Vérifie si déjà livrée
+        // Vérifie si déjà assignée à un livreur
         if ($commande->livraison) {
-            return response()->json(['message' => 'Cette commande est déjà assignée.'], 400);
+            return response()->json(['message' => 'Cette commande est déjà assignée à un livreur.'], 400);
         }
 
         $livraison = Livraison::create([
             'commande_id' => $commande->id,
             'livreur_id' => $user->id,
             'statut' => 'en_chemin',
-            'code_validation' => random_int(1000, 9999), // ou null
+            'code_validation' => random_int(1000, 9999),
         ]);
 
-        return response()->json(['message' => 'Livraison prise en charge.', 'livraison' => $livraison]);
+        $livraison->load(['commande.user', 'commande.plats', 'livreur']);
+
+        return response()->json([
+            'message' => 'Livraison prise en charge.',
+            'livraison' => $livraison,
+        ]);
     }
 
     // 2. Marquer une livraison comme livrée
@@ -56,6 +61,9 @@ class LivraisonController extends Controller
             'statut' => 'livree',
         ]);
 
+        // Mettre à jour le statut de la commande associée
+        $livraison->commande()->update(['statut' => 'livree']);
+
         return response()->json(['message' => 'Commande livrée avec succès.', 'livraison' => $livraison]);
     }
 
@@ -68,15 +76,20 @@ class LivraisonController extends Controller
             return response()->json(['message' => 'Accès refusé.'], 403);
         }
 
-        $livraisons = Livraison::where('livreur_id', $user->id)->with('commande')->get();
+        $livraisons = Livraison::where('livreur_id', $user->id)
+            ->with(['commande.user', 'commande.plats'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json($livraisons);
     }
 
-    // 4. Admin : voir toutes les livraisons
+    // 4. Admin : voir toutes les livraisons avec livreur et commande complète
     public function toutes()
     {
-        $livraisons = Livraison::with(['commande', 'livreur'])->get();
+        $livraisons = Livraison::with(['commande.user', 'commande.plats', 'livreur'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         return response()->json($livraisons);
     }
 }

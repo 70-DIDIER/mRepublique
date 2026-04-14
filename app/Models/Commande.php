@@ -50,4 +50,9 @@ class Commande extends Model
     {
         return $this->hasOne(\App\Models\Paiement::class);
     }
+
+    public function livraison()
+    {
+        return $this->hasOne(\App\Models\Livraison::class);
+    }
 }
